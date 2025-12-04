@@ -1,0 +1,11 @@
+{
+  "extends": "../typescript-config/base.json",
+  "compilerOptions": {
+    "moduleResolution": "node16",        // or "bundler"
+    "module": "node16",                  // keep consistent with your project
+    "target": "es2020",
+    "skipLibCheck": true,
+    "resolvePackageJsonExports": true
+  },
+  "include": ["src", "prisma", "prisma.config.ts"]
+}
