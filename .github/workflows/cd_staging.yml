@@ -18,7 +18,7 @@ jobs:
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh_key root@143.110.242.32 "
-            export PATH=\$PATH:/usr/local/bin &&
+            export PATH=\$PATH:/usr/local/bin:/usr/bin:/root/.local/share/pnpm &&
             cd /root/bms_devops &&
             git pull origin main &&
             pnpm install &&
