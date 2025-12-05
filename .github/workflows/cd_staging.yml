@@ -1,0 +1,27 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  redeploy_everything:
+    name: Redeploy Everything
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup SSH Key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh_key
+          chmod 600 ~/.ssh_key
+
+      - name: Deploy to Server
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh_key root@143.110.242.32 "
+            cd /root/bms_devops &&
+            git pull origin main &&
+            pnpm install &&
+            pnpm run build &&
+            pm2 restart all
+          "
