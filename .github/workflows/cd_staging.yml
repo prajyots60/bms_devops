@@ -10,18 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup SSH Key
-        run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh_key
-          chmod 600 ~/.ssh_key
-
-      - name: Deploy to Server
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh_key root@143.110.242.32 "
-            export PATH=\$PATH:/usr/local/bin:/usr/bin:/root/.local/share/pnpm &&
-            cd /root/bms_devops &&
-            git pull origin main &&
-            pnpm install &&
-            pnpm run build &&
-            pm2 restart all
-          "
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 143.110.242.32
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # This forces the script to fail if any command inside fails
+          script_stop: true
+          script: |
+            # Navigate to folder
+            cd bms_devops
+            
+            # Pull changes
+            git pull origin main
+            
+            # Install dependencies (frozen-lockfile is faster/safer for CI)
+            pnpm install --frozen-lockfile
+            
+            # Build
+            pnpm run build
+            
+            # Restart PM2 (reload is zero-downtime, restart is hard restart)
+            pm2 reload all || pm2 restart all
