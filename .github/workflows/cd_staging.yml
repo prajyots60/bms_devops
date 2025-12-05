@@ -7,7 +7,6 @@ on:
 
 jobs:
   redeploy_everything:
-    name: Redeploy Everything
     runs-on: ubuntu-latest
 
     steps:
@@ -19,6 +18,7 @@ jobs:
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh_key root@143.110.242.32 "
+            export PATH=\$PATH:/usr/local/bin &&
             cd /root/bms_devops &&
             git pull origin main &&
             pnpm install &&
