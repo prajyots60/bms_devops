@@ -18,7 +18,7 @@ jobs:
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh_key root@143.110.242.32 "
-            export PATH=\$PATH:/usr/local/bin:/usr/bin:/root/.local/share/pnpm &&
+            export PATH=/root/.nvm/versions/node/v24.11.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin &&
             cd /root/bms_devops &&
             git pull origin main &&
             npm install -g pnpm &&
